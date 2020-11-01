@@ -3,7 +3,10 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:keep_clone/AppUI/notesSearch.dart';
 import 'package:keep_clone/AppUtills/drawerElements.dart';
+import 'package:keep_clone/AppUtills/selectiveGridView.dart';
+import 'dart:math';
 
 class NotesHome extends StatefulWidget {
   @override
@@ -32,22 +35,13 @@ class _NotesHomeState extends State<NotesHome> {
     });
   }
 
-  var dummyList = [
-    new Text(
-        "asdddddddddddddddddddsdafldksjaffffffffffffssslakkkkkklllllllllllllllllllllllllllklllkklkl"),
-    new Text(
-        "asddddddddddddddddsslakkkkkklllllllllllllllllllllllllllklllkklkl"),
-    new Text(
-        "asddddddsdfghjkuytrdvbnjuytgfvbnkuygfvdddddddddddddsdafldksjaffffffffffffssslakkkkkklllllllllllllllllllllllllllklllkklkl"),
-    new Text(
-        "asdddddddddddddddddddsdafldksjaffffffffffffssslakkkkkklllllllllllllllllllllllllllklllkklkl"),
-    new Text("aslakkkkkkllllllllllllllllllllklllkklkl"),
-    new Text("asdlllllllllklllkklkl"),
-    new Text(
-        "asddddddddddddddddddkahfjahjdfhjashfuewafhkdhkjfhaskjhdkfjhslkahdflkjdsdafldksjaffffffffffffssslakkkkkklllllllllllllllllllllllllllklllkklkl"),
-    new Text(
-        "asdddddddddddddddddddsdafldksjaffffffffffffssslakkkkkklllllllllllllllllllllllllllklllkklkl"),
-  ];
+  List<String> _imageList = List.generate(
+      50,
+      (index) =>
+          "https://picsum.photos/seed/image0$index/200/${2 + Random().nextInt(5)}00");
+  List<int> _selectedIndexList = List();
+  bool _selectionMode = false;
+
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
@@ -71,7 +65,8 @@ class _NotesHomeState extends State<NotesHome> {
                 child: InkWell(
                   customBorder: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8.0)),
-                  onTap: () => print("Tap Detected...."),
+                  onTap: () => Navigator.push(context,
+                      MaterialPageRoute(builder: (_) => NotesSearch())),
                   child: Padding(
                     padding: const EdgeInsets.all(6.0),
                     child: Row(
@@ -92,7 +87,11 @@ class _NotesHomeState extends State<NotesHome> {
                         new SizedBox(
                           width: 6,
                         ),
-                        Expanded(child: new Text("Search your notes",style: GoogleFonts.roboto(fontSize: 14),)),
+                        Expanded(
+                            child: new Text(
+                          "Search your notes",
+                          style: GoogleFonts.poppins(fontSize: 14),
+                        )),
                         new InkWell(
                           customBorder: CircleBorder(),
                           onTap: () {
@@ -132,9 +131,31 @@ class _NotesHomeState extends State<NotesHome> {
           ),
           new SliverStaggeredGrid.countBuilder(
             crossAxisCount: 2,
-            itemCount: dummyList.length,
-            itemBuilder: (context, index) => Card(
-              child: dummyList[index],
+            itemCount: _imageList.length,
+            itemBuilder: (context, index) => MyGridTile(
+              list: _imageList,
+              selectedIndexList: _selectedIndexList,
+              selectionMode: _selectionMode,
+              onTap: () {
+                setState(() {
+                  if (_selectedIndexList.contains(index)) {
+                    _selectedIndexList.remove(index);
+                    if (_selectedIndexList.isEmpty) {
+                      _selectionMode = false;
+                    }
+                  } else {
+                    _selectedIndexList.add(index);
+                  }
+                  debugPrint("List: $_selectedIndexList");
+                });
+              },
+              onLongPress: () {
+                setState(() {
+                  _selectionMode = true;
+                  _selectedIndexList.add(index);
+                });
+              },
+              index: index,
             ),
             staggeredTileBuilder: (index) => StaggeredTile.fit(isGrid ? 1 : 2),
           ),
@@ -144,13 +165,14 @@ class _NotesHomeState extends State<NotesHome> {
         child: ListView(
           children: [
             Padding(
-              padding: const EdgeInsets.only(left: 20, top: 16,bottom: 25.0),
+              padding: const EdgeInsets.only(left: 20, top: 16, bottom: 25.0),
               child: new Text(
                 "Google Keep Clone",
-                style: GoogleFonts.lexendDeca(fontSize: 24),
+                style: GoogleFonts.poppins(
+                  fontSize: 24,
+                ),
               ),
             ),
-          
             new DrawerElement(
               onTap: () =>
                   toggleElement(true, false, false, false, false, false),
@@ -208,5 +230,57 @@ class _NotesHomeState extends State<NotesHome> {
         ),
       ),
     );
+  }
+
+  body(int index) {
+    if (_selectionMode) {
+      return InkWell(
+        onTap: () {
+          setState(() {
+            if (_selectedIndexList.contains(index)) {
+              _selectedIndexList.remove(index);
+              if (_selectedIndexList.isEmpty) {
+                _selectionMode = false;
+              }
+            } else {
+              _selectedIndexList.add(index);
+            }
+          });
+        },
+        customBorder:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
+        child: Card(
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8.0),
+              side: BorderSide(
+                  color: _selectedIndexList.contains(index)
+                      ? Colors.red
+                      : Theme.of(context).cardColor)),
+          child: Padding(
+            padding: EdgeInsets.all(16.0),
+            child: Image.network(
+              _imageList[index],
+            ),
+          ),
+        ),
+      );
+    } else {
+      return InkWell(
+        onLongPress: () {
+          setState(() {
+            _selectionMode = true;
+            _selectedIndexList.add(index);
+          });
+        },
+        customBorder:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
+        child: Card(
+          child: Image.network(
+            _imageList[index],
+            fit: BoxFit.cover,
+          ),
+        ),
+      );
+    }
   }
 }

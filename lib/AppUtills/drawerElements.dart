@@ -42,7 +42,7 @@ class DrawerElement extends StatelessWidget {
                 ),
                 new Text(
                   title,
-                  style: GoogleFonts.roboto(fontSize: 14),
+                  style: GoogleFonts.poppins(fontSize: 14),
                 )
               ],
             ),
