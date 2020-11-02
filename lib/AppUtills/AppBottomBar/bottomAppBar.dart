@@ -12,10 +12,10 @@ class BottomBar extends StatelessWidget {
         child: new Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-            _bottomBarElement(icon: Icons.check_box_outlined),
-            _bottomBarElement(icon: Icons.brush_outlined),
-            _bottomBarElement(icon: Icons.mic_none),
-            _bottomBarElement(icon: Icons.photo_outlined),
+            _bottomBarElement(icon: Icons.check_box_outlined,onTap: (){}),
+            _bottomBarElement(icon: Icons.brush_outlined,onTap: (){}),
+            _bottomBarElement(icon: Icons.mic_none,onTap: (){}),
+            _bottomBarElement(icon: Icons.photo_outlined,onTap: (){}),
           ],
         ),
       ),

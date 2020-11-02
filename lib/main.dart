@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:keep_clone/AppUI/notesHome.dart';
+import 'package:keep_clone/AppUIs/notesHome.dart';
 
 void main(List<String> args) {
   runApp(MyApp());
