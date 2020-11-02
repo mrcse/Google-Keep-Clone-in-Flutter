@@ -28,9 +28,9 @@ class MyGridTile extends StatelessWidget {
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8.0),
               side: BorderSide(
-                  width: 3.0,
+                  width: 2.5,
                   color: selectedIndexList.contains(index)
-                      ? Colors.redAccent
+                      ? Colors.white
                       : Colors.transparent)),
           child: Padding(
             padding: EdgeInsets.all(8.0),

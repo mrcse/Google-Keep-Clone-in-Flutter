@@ -1,22 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class SelectionAppBar extends StatefulWidget {
+class SelectionAppBar extends StatelessWidget {
   final Function onTap;
   final List selectedIndexList;
   final bool selectionMode;
-  SelectionAppBar(
-      {this.onTap, this.selectedIndexList, this.selectionMode = false});
-  @override
-  _SelectionAppBarState createState() => _SelectionAppBarState(onTap: onTap,
-      selectedIndexList: selectedIndexList, selectionMode: selectionMode);
-}
-
-class _SelectionAppBarState extends State<SelectionAppBar> {
-  final Function onTap;
-  final List selectedIndexList;
-  bool selectionMode;
-  _SelectionAppBarState({this.onTap,this.selectedIndexList, this.selectionMode});
+  SelectionAppBar({this.onTap,this.selectedIndexList, this.selectionMode});
   @override
   Widget build(BuildContext context) {
     return SliverAppBar(

@@ -2,19 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:keep_clone/AppUIs/notesSearch.dart';
 
-class NormalAppBar extends StatefulWidget {
+class NormalAppBar extends StatelessWidget {
+  final Function changeView;
   final Function openDrawer;
   final bool isGrid;
-  NormalAppBar({this.openDrawer, this.isGrid});
-  @override
-  _NormalAppBarState createState() =>
-      _NormalAppBarState(openDrawer: openDrawer, isGrid: isGrid);
-}
+  NormalAppBar({this.changeView, this.openDrawer, this.isGrid});
 
-class _NormalAppBarState extends State<NormalAppBar> {
-  final Function openDrawer;
-  bool isGrid = false;
-  _NormalAppBarState({this.openDrawer, this.isGrid});
   @override
   Widget build(BuildContext context) {
     return SliverPadding(
@@ -60,11 +53,7 @@ class _NormalAppBarState extends State<NormalAppBar> {
                   )),
                   new InkWell(
                     customBorder: CircleBorder(),
-                    onTap: () {
-                      setState(() {
-                        isGrid = isGrid ? false : true;
-                      });
-                    },
+                    onTap: changeView,
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Icon(isGrid

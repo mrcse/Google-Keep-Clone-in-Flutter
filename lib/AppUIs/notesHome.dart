@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:keep_clone/AppUIs/notesAdd.dart';
 import 'package:keep_clone/AppUtills/AppDrawer/appDrawer.dart';
 import 'package:keep_clone/AppUtills/AppBottomBar/bottomAppBar.dart';
 import 'package:keep_clone/AppUtills/AppBottomBar/floatingActionButton.dart';
@@ -50,6 +51,11 @@ class _NotesHomeState extends State<NotesHome> {
               : NormalAppBar(
                   openDrawer: () => _drawerKey.currentState.openDrawer(),
                   isGrid: isGrid,
+                  changeView: () {
+                    setState(() {
+                      isGrid = isGrid ? false : true;
+                    });
+                  },
                 ),
           new SliverStaggeredGrid.countBuilder(
             crossAxisCount: 2,
@@ -86,7 +92,8 @@ class _NotesHomeState extends State<NotesHome> {
       drawer: AppDrawer(),
       bottomNavigationBar: BottomBar(),
       floatingActionButton: FloatingButton(
-        onPressed: () {},
+        onPressed: () => Navigator.push(
+            context, MaterialPageRoute(builder: (_) => AddNotes())),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.miniEndDocked,
     );
