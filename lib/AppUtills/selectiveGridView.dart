@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class MyGridTile extends StatelessWidget {
-  final List<String> list;
-  final List<int> selectedIndexList;
+  final List<dynamic> list;
+  final List<dynamic> selectedIndexList;
   final int index;
   final Function onTap;
   final Function onLongPress;
@@ -34,8 +35,10 @@ class MyGridTile extends StatelessWidget {
                       : Colors.transparent)),
           child: Padding(
             padding: EdgeInsets.all(8.0),
-            child: Image.network(
-              list[index],
+            child: Text(
+              "${list[index]['title']}",
+              style: GoogleFonts.poppins(
+                  fontSize: 18.0, color: Colors.grey.shade400),
             ),
           ),
         ),
@@ -47,9 +50,11 @@ class MyGridTile extends StatelessWidget {
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
         child: Card(
           child: Padding(
-            padding: EdgeInsets.all(8.0),
-            child: Image.network(
-              list[index],
+            padding: EdgeInsets.all(10.0),
+            child: Text(
+              "${list[index]['title']}",
+              style: GoogleFonts.poppins(
+                  fontSize: 18.0, color: Colors.grey.shade400),
             ),
           ),
         ),

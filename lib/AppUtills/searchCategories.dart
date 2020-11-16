@@ -4,12 +4,6 @@ class SearchCategory extends StatelessWidget {
   final String title;
   final IconData icon;
   SearchCategory({this.title, this.icon});
-
-  // Widget _typeItem(
-  //     {String title, IconData icon, Color bgColor, Color fontColor}) {
-  //   return
-  // }
-
   @override
   Widget build(BuildContext context) {
     return Container(

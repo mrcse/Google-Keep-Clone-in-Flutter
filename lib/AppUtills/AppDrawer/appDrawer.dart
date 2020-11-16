@@ -1,5 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:keep_clone/AppControllers/drawerController.dart';
+import 'package:keep_clone/AppUIs/noteArchive.dart';
+import 'package:keep_clone/AppUIs/noteLabel.dart';
+import 'package:keep_clone/AppUIs/noteReminder.dart';
+import 'package:keep_clone/AppUIs/noteSettings.dart';
+import 'package:keep_clone/AppUIs/noteTrash.dart';
+import 'package:keep_clone/AppUIs/notesHome.dart';
 import 'package:keep_clone/AppUtills/AppDrawer/drawerElements.dart';
 
 class AppDrawer extends StatefulWidget {
@@ -8,23 +16,8 @@ class AppDrawer extends StatefulWidget {
 }
 
 class _AppDrawerState extends State<AppDrawer> {
-  bool isNotes = true;
-  bool isReminder = false;
-  bool isArchive = false;
-  bool isTrash = false;
-  bool isSettings = false;
-  bool isHelp = false;
+  final drawerController = Get.put(DrawerControllerLite());
 
-  toggleElement(bool n, bool r, bool a, bool t, bool s, bool h) {
-    setState(() {
-      this.isNotes = n;
-      this.isReminder = r;
-      this.isArchive = a;
-      this.isTrash = t;
-      this.isSettings = s;
-      this.isHelp = h;
-    });
-  }
   @override
   Widget build(BuildContext context) {
     return new Drawer(
@@ -40,51 +33,68 @@ class _AppDrawerState extends State<AppDrawer> {
             ),
           ),
           new DrawerElement(
-            onTap: () => toggleElement(true, false, false, false, false, false),
+            onTap: () {
+              drawerController.toggleElement(true, false, false, false);
+              Get.offAll(NotesHome());
+            },
             title: "Notes",
             icon: Icon(Icons.lightbulb_outline),
             bgColor: Color(0xff554C33),
-            isSelected: isNotes,
+            isSelected: drawerController.isNotes,
           ),
           new DrawerElement(
-            onTap: () => toggleElement(false, true, false, false, false, false),
+            onTap: () {
+              drawerController.toggleElement(false, true, false, false);
+              Get.offAll(RemindNotes());
+            },
             title: "Reminders",
             icon: Icon(Icons.notifications_none_outlined),
             bgColor: Color(0xff554C33),
-            isSelected: isReminder,
+            isSelected: drawerController.isReminder,
           ),
           new Divider(),
           new DrawerElement(
-              onTap: () {}, title: "Create new label", icon: Icon(Icons.add)),
+              onTap: () {
+                Get.to(NotesLabel());
+              },
+              title: "Create new label",
+              icon: Icon(Icons.add)),
           new Divider(),
           new DrawerElement(
-            onTap: () => toggleElement(false, false, true, false, false, false),
+            onTap: () {
+              drawerController.toggleElement(false, false, true, false);
+              Get.offAll(ArchiveNotes());
+            },
             title: "Archive",
             icon: Icon(Icons.archive_outlined),
             bgColor: Color(0xff554C33),
-            isSelected: isArchive,
+            isSelected: drawerController.isArchive,
           ),
           new DrawerElement(
-            onTap: () => toggleElement(false, false, false, true, false, false),
+            onTap: () {
+              drawerController.toggleElement(false, false, false, true);
+              Get.offAll(TrashNotes());
+            },
             title: "Trash",
             icon: Icon(Icons.delete),
             bgColor: Color(0xff554C33),
-            isSelected: isTrash,
+            isSelected: drawerController.isTrash,
           ),
           new Divider(),
           new DrawerElement(
-            onTap: () => toggleElement(false, false, false, false, true, false),
+            onTap: () {
+              print("Settings");
+              Get.to(NotesSettings());
+            },
             title: "Settings",
             icon: Icon(Icons.settings_outlined),
             bgColor: Color(0xff554C33),
-            isSelected: isSettings,
           ),
           new DrawerElement(
-            onTap: () => toggleElement(false, false, false, false, false, true),
+            onTap: () => print("Help & feedback"),
             title: "Help & feedback",
             icon: Icon(Icons.help_outline),
             bgColor: Color(0xff554C33),
-            isSelected: isHelp,
           ),
         ],
       ),

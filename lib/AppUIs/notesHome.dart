@@ -9,7 +9,8 @@ import 'package:keep_clone/AppUtills/AppBottomBar/floatingActionButton.dart';
 import 'package:keep_clone/AppUtills/AppBars/normalAppBar.dart';
 import 'package:keep_clone/AppUtills/AppBars/selectionAppBar.dart';
 import 'package:keep_clone/AppUtills/selectiveGridView.dart';
-import 'dart:math';
+import './dummyList.dart' as list;
+import 'package:get/get.dart';
 
 class NotesHome extends StatefulWidget {
   @override
@@ -18,13 +19,8 @@ class NotesHome extends StatefulWidget {
 
 class _NotesHomeState extends State<NotesHome> {
   GlobalKey<ScaffoldState> _drawerKey = GlobalKey();
-
   bool isGrid = true;
-
-  List<String> _imageList = List.generate(
-      50,
-      (index) =>
-          "https://picsum.photos/seed/image0$index/200/${2 + Random().nextInt(5)}00");
+  List<dynamic> _dataList = list.myList();
   List<int> _selectedIndexList = List();
   bool _selectionMode = false;
 
@@ -57,11 +53,11 @@ class _NotesHomeState extends State<NotesHome> {
                     });
                   },
                 ),
-          new SliverStaggeredGrid.countBuilder(
+          SliverStaggeredGrid.countBuilder(
             crossAxisCount: 2,
-            itemCount: _imageList.length,
+            itemCount: _dataList.length,
             itemBuilder: (context, index) => MyGridTile(
-              list: _imageList,
+              list: _dataList,
               selectedIndexList: _selectedIndexList,
               selectionMode: _selectionMode,
               onTap: () {
@@ -92,8 +88,7 @@ class _NotesHomeState extends State<NotesHome> {
       drawer: AppDrawer(),
       bottomNavigationBar: BottomBar(),
       floatingActionButton: FloatingButton(
-        onPressed: () => Navigator.push(
-            context, MaterialPageRoute(builder: (_) => AddNotes())),
+        onPressed: () => Get.to(AddNotes()),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.miniEndDocked,
     );
