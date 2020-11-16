@@ -1,24 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class SelectionAppBar extends StatelessWidget with PreferredSizeWidget {
-  @override
-  final Size preferredSize = Size.fromHeight(50.0);
+class SelectionAppBarHome extends StatelessWidget {
   final Function onTap;
   final List selectedIndexList;
   final bool selectionMode;
-  SelectionAppBar({this.onTap,this.selectedIndexList, this.selectionMode});
-
+  SelectionAppBarHome({this.onTap,this.selectedIndexList, this.selectionMode});
   @override
   Widget build(BuildContext context) {
-    return AppBar(
+    return SliverAppBar(
+      pinned: true,
+      floating: false,
       automaticallyImplyLeading: false,
       backgroundColor: Theme.of(context).cardColor,
       title: Row(
         children: [
-          iconButton(
-              onTap: onTap,
-              icon: Icons.close),
+          iconButton(onTap: onTap, icon: Icons.close),
           new SizedBox(
             width: 6,
           ),

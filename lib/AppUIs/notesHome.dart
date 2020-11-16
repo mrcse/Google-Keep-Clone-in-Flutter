@@ -7,7 +7,7 @@ import 'package:keep_clone/AppUtills/AppDrawer/appDrawer.dart';
 import 'package:keep_clone/AppUtills/AppBottomBar/bottomAppBar.dart';
 import 'package:keep_clone/AppUtills/AppBottomBar/floatingActionButton.dart';
 import 'package:keep_clone/AppUtills/AppBars/normalAppBar.dart';
-import 'package:keep_clone/AppUtills/AppBars/selectionAppBar.dart';
+import 'package:keep_clone/AppUtills/AppBars/selectionAppBarHome.dart';
 import 'package:keep_clone/AppUtills/selectiveGridView.dart';
 import './dummyList.dart' as list;
 import 'package:get/get.dart';
@@ -34,7 +34,7 @@ class _NotesHomeState extends State<NotesHome> {
       body: new CustomScrollView(
         slivers: [
           _selectionMode
-              ? SelectionAppBar(
+              ? SelectionAppBarHome(
                   onTap: () {
                     setState(() {
                       _selectionMode = false;

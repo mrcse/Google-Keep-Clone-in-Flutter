@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:keep_clone/AppUIs/notesAdd.dart';
+import 'package:keep_clone/AppUtills/AppBars/selectionAppBar.dart';
 import 'package:keep_clone/AppUtills/AppBottomBar/bottomAppBar.dart';
 import 'package:keep_clone/AppUtills/AppBottomBar/floatingActionButton.dart';
 import 'package:keep_clone/AppUtills/AppDrawer/appDrawer.dart';
@@ -46,7 +47,16 @@ class _RemindNotesState extends State<RemindNotes> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: _selectionMode ? selectionAppbar() : _normalAppBar(),
+      appBar: _selectionMode ? SelectionAppBar(
+              onTap: () {
+                setState(() {
+                  _selectionMode = false;
+                  _selectedIndexList.clear();
+                });
+              },
+              selectedIndexList: _selectedIndexList,
+              selectionMode: _selectionMode,
+            ) : _normalAppBar(),
       drawer: new AppDrawer(),
       body: StaggeredGridView.countBuilder(
         crossAxisCount: 2,
@@ -116,54 +126,6 @@ class _RemindNotesState extends State<RemindNotes> {
           ),
         ),
       ],
-    );
-  }
-
-  selectionAppbar() {
-    return AppBar(
-      automaticallyImplyLeading: false,
-      backgroundColor: Theme.of(context).cardColor,
-      title: Row(
-        children: [
-          iconButton(
-              onTap: () {
-                setState(() {
-                  _selectionMode = false;
-                  _selectedIndexList.clear();
-                });
-              },
-              icon: Icons.close),
-          new SizedBox(
-            width: 6,
-          ),
-          Expanded(
-            child: new Text(
-              "${_selectedIndexList.length}",
-              style: GoogleFonts.poppins(
-                  fontSize: 20, fontWeight: FontWeight.w500),
-            ),
-          ),
-          iconButton(onTap: () {}, icon: Icons.push_pin_outlined),
-          iconButton(onTap: () {}, icon: Icons.add_alert_outlined),
-          iconButton(onTap: () {}, icon: Icons.color_lens_outlined),
-          iconButton(onTap: () {}, icon: Icons.label_outline),
-          iconButton(onTap: () {}, icon: Icons.more_vert),
-          new SizedBox(
-            width: 6,
-          ),
-        ],
-      ),
-    );
-  }
-
-  iconButton({Function onTap, IconData icon}) {
-    return new InkWell(
-      customBorder: CircleBorder(),
-      onTap: onTap,
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Icon(icon),
-      ),
     );
   }
 }
