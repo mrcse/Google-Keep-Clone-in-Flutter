@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:keep_clone/AppControllers/labelController.dart';
 import 'package:keep_clone/AppUIs/dummyList.dart';
 
 class NotesLabel extends StatefulWidget {
@@ -8,25 +9,26 @@ class NotesLabel extends StatefulWidget {
 }
 
 class _NotesLabelState extends State<NotesLabel> {
-  TextEditingController _labelController = new TextEditingController();
+  TextEditingController _labelTextController = new TextEditingController();
+  final label = LabelController(isSelected: List.generate(2, (index) => false));
+  final listViewTextField = List.generate(2, (index) => FocusNode());
   List _list = myList();
   bool isLabelActive = true;
   bool isListTileActive = false;
   FocusNode topTextField;
-  FocusNode listViewTextField;
 
   @override
   void initState() {
     super.initState();
 
     topTextField = FocusNode();
-    listViewTextField = FocusNode();
   }
 
   @override
   void dispose() {
     topTextField.dispose();
-    listViewTextField.dispose();
+    for (var i = 0; i < listViewTextField.length; i++)
+      listViewTextField[i].dispose();
 
     super.dispose();
   }
@@ -35,6 +37,13 @@ class _NotesLabelState extends State<NotesLabel> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: new AppBar(
+        actions: [
+          IconButton(
+              icon: Icon(Icons.add),
+              onPressed: () {
+                print("${label.isSelected}");
+              })
+        ],
         title: new Text(
           "Edit labels",
           style: GoogleFonts.poppins(fontSize: 18),
@@ -64,6 +73,7 @@ class _NotesLabelState extends State<NotesLabel> {
         children: [
           new GestureDetector(
             onTap: () {
+              label.reset();
               setState(() {
                 isListTileActive = false;
                 if (!isLabelActive) {
@@ -90,6 +100,7 @@ class _NotesLabelState extends State<NotesLabel> {
           Expanded(
             child: TextField(
               onTap: () {
+                label.reset();
                 setState(() {
                   isLabelActive = true;
                   isListTileActive = false;
@@ -97,7 +108,7 @@ class _NotesLabelState extends State<NotesLabel> {
               },
               autofocus: true,
               focusNode: topTextField,
-              controller: _labelController,
+              controller: _labelTextController,
               cursorColor: Colors.grey.shade400,
               decoration: new InputDecoration(
                 hintText: "Creat new Label",
@@ -109,6 +120,7 @@ class _NotesLabelState extends State<NotesLabel> {
           ),
           new GestureDetector(
             onTap: () {
+              label.reset();
               setState(() {
                 isLabelActive = isLabelActive ? false : true;
                 isListTileActive = false;
@@ -142,7 +154,7 @@ class _NotesLabelState extends State<NotesLabel> {
             decoration: BoxDecoration(
               border: Border.symmetric(
                 horizontal: BorderSide(
-                    color: isListTileActive
+                    color: label.isSelected[index]
                         ? Colors.grey.shade400
                         : Colors.transparent),
               ),
@@ -151,21 +163,25 @@ class _NotesLabelState extends State<NotesLabel> {
               children: [
                 new GestureDetector(
                   onTap: () {
+                    bool temp = label.isSelected[index];
+                    label.reset();
                     setState(() {
                       isLabelActive = false;
-                      if (!isListTileActive) {
-                        isListTileActive = true;
-                        listViewTextField.requestFocus();
+                      if (!temp) {
+                        label.isSelected[index] = true;
+                        listViewTextField[index].requestFocus();
                       } else {
-                        isListTileActive = false;
-                        listViewTextField.unfocus();
+                        label.isSelected[index] = false;
+                        listViewTextField[index].unfocus();
                       }
                     });
                   },
                   child: Padding(
                     padding: EdgeInsets.all(12.0),
                     child: Icon(
-                      isListTileActive ? Icons.delete : Icons.label_outline,
+                      label.isSelected[index]
+                          ? Icons.delete
+                          : Icons.label_outline,
                       color: Colors.grey.shade400,
                     ),
                   ),
@@ -176,17 +192,18 @@ class _NotesLabelState extends State<NotesLabel> {
                 Expanded(
                   child: TextField(
                     onTap: () {
+                      label.reset();
                       setState(() {
-                        isListTileActive = true;
+                        label.isSelected[index] = true;
                         isLabelActive = false;
                       });
                     },
                     autofocus: false,
-                    focusNode: listViewTextField,
-                    controller: _labelController,
+                    focusNode: listViewTextField[index],
+                    controller: _labelTextController,
                     cursorColor: Colors.grey.shade400,
                     decoration: new InputDecoration(
-                      hintText: "Creat new Label",
+                      hintText: "Tile",
                       hintStyle: GoogleFonts.poppins(fontSize: 14),
                       border: InputBorder.none,
                     ),
@@ -195,15 +212,22 @@ class _NotesLabelState extends State<NotesLabel> {
                 ),
                 new GestureDetector(
                   onTap: () {
+                    bool temp = label.isSelected[index];
+                    label.reset();
                     setState(() {
-                      isListTileActive = isListTileActive ? false : true;
                       isLabelActive = false;
-                      listViewTextField.unfocus();
+                      if (!temp) {
+                        label.isSelected[index] = true;
+                        listViewTextField[index].requestFocus();
+                      } else {
+                        label.isSelected[index] = false;
+                        listViewTextField[index].unfocus();
+                      }
                     });
                   },
                   child: Padding(
                     padding: EdgeInsets.all(12.0),
-                    child: isListTileActive
+                    child: label.isSelected[index]
                         ? Icon(
                             Icons.check,
                             color: Colors.grey.shade400,

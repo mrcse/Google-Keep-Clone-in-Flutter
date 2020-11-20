@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:get/get.dart';
+import 'package:keep_clone/AppControllers/imageController.dart';
 
 class BottomBar extends StatelessWidget {
+  final imageController = Get.put(ImageController());
+  
   @override
   Widget build(BuildContext context) {
     return Transform.translate(
@@ -57,10 +61,16 @@ class BottomBar extends StatelessWidget {
           new ListTile(
             title: new Text("Take photo"),
             leading: Icon(Icons.camera_alt_outlined),
+            onTap: () {
+              imageController.openCamera();
+            },
           ),
           new ListTile(
             title: new Text("Choose image"),
             leading: Icon(Icons.photo_outlined),
+            onTap: () {
+              imageController.openFileExplore();
+            },
           ),
         ],
       ),

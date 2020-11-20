@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 
 class NotesSettings extends StatefulWidget {
   @override
@@ -7,6 +8,19 @@ class NotesSettings extends StatefulWidget {
 }
 
 class _NotesSettingsState extends State<NotesSettings> {
+  DateTime morningTime = DateTime.now();
+  DateTime afterNoonTime = DateTime.now();
+  DateTime eveningTime = DateTime.now();
+  var timeFormat = DateFormat.jm();
+  Future<TimeOfDay> _selectTime(BuildContext context,
+      {@required DateTime initialDate}) {
+    return showTimePicker(
+      context: context,
+      initialTime:
+          TimeOfDay(hour: initialDate.hour, minute: initialDate.minute),
+    );
+  }
+
   bool addItemsToBottom = true;
   bool checkedItems = false;
   bool linksPreview = false;
@@ -19,30 +33,6 @@ class _NotesSettingsState extends State<NotesSettings> {
         "Settings",
         style: GoogleFonts.poppins(fontSize: 16),
       )),
-      //   title: Row(
-      //     children: [
-      //       new InkWell(
-      //         customBorder: CircleBorder(),
-      //         onTap: () {
-      //           Get.offAll(NotesHome());
-      //         },
-      //         child: Padding(
-      //           padding: EdgeInsets.all(8),
-      //           child: Icon(
-      //             Icons.arrow_back,
-      //           ),
-      //         ),
-      //       ),
-      //       new SizedBox(
-      //         width: 16.0,
-      //       ),
-      //       new Text(
-      //         "Settings",
-      //         style: GoogleFonts.poppins(fontSize: 16),
-      //       )
-      //     ],
-      //   ),
-      // ),
       body: ListView(
         children: [
           _title("Display Options"),
@@ -75,9 +65,55 @@ class _NotesSettingsState extends State<NotesSettings> {
           ),
           _listTile("Theme", "System default", () {}),
           _title("Reminder Defaults"),
-          _listTile("Morning", "8:00 AM", () {}),
-          _listTile("Afternoon", "1:00 PM", () {}),
-          _listTile("Evening", "6:00 PM", () {}),
+          _listTile(
+            "Morning",
+            timeFormat.format(morningTime),
+            () async {
+              final time =
+                  await _selectTime(context, initialDate: morningTime);
+              if (time == null) return;
+
+              setState(() {
+                morningTime = DateTime(
+                  morningTime.year,
+                  morningTime.month,
+                  morningTime.day,
+                  time.hour,
+                  time.minute,
+                );
+              });
+            },
+          ),
+          _listTile("Afternoon", timeFormat.format(afterNoonTime), () async {
+              final time =
+                  await _selectTime(context, initialDate: afterNoonTime);
+              if (time == null) return;
+
+              setState(() {
+                afterNoonTime = DateTime(
+                  afterNoonTime.year,
+                  afterNoonTime.month,
+                  afterNoonTime.day,
+                  time.hour,
+                  time.minute,
+                );
+              });
+            },),
+          _listTile("Evening", timeFormat.format(eveningTime), () async {
+              final time =
+                  await _selectTime(context, initialDate: eveningTime);
+              if (time == null) return;
+
+              setState(() {
+                eveningTime = DateTime(
+                  eveningTime.year,
+                  eveningTime.month,
+                  eveningTime.day,
+                  time.hour,
+                  time.minute,
+                );
+              });
+            },),
           _title("Sharings"),
           _switchTile(
             title: "Enable sharing",

@@ -1,38 +1,45 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class AddNotes extends StatelessWidget{
+class AddNotes extends StatelessWidget {
+  final cameraImage;
+  final List galleryImage;
   final TextEditingController _titleController = new TextEditingController();
   final TextEditingController _noteController = new TextEditingController();
   final ScrollController _controller = ScrollController();
+  AddNotes({this.cameraImage, this.galleryImage});
   @override
   Widget build(BuildContext context) {
+    debugPrint("\nFck$galleryImage \n ");
     return Scaffold(
-      appBar: AppBar(
-        actions: [
-          iconButton(onTap: () {}, icon: Icons.push_pin_outlined),
-          SizedBox(
-            width: 8.0,
-          ),
-          iconButton(onTap: () {}, icon: Icons.add_alert_outlined),
-          SizedBox(
-            width: 8.0,
-          ),
-          iconButton(onTap: () {}, icon: Icons.archive_outlined),
-          SizedBox(
-            width: 8.0,
-          ),
-        ],
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      ),
-      body: SingleChildScrollView(
-        controller: _controller,
-        child: Column(
-          children: [
+        appBar: AppBar(
+          actions: [
+            iconButton(onTap: () {}, icon: Icons.push_pin_outlined),
             SizedBox(
-              height: 28.0,
+              width: 8.0,
             ),
+            iconButton(onTap: () {}, icon: Icons.add_alert_outlined),
+            SizedBox(
+              width: 8.0,
+            ),
+            iconButton(onTap: () {}, icon: Icons.archive_outlined),
+            SizedBox(
+              width: 8.0,
+            ),
+          ],
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        ),
+        body: ShrinkWrappingViewport(
+          slivers: [
+            (null != galleryImage)
+                ? Image.file(galleryImage[0])
+                : Container(
+                    height: 20.0,
+                    color: Colors.transparent,
+                  ),
             textFeild(controller: _titleController, size: 24.0, hint: "Title"),
             textFeild(
               controller: _noteController,
@@ -40,27 +47,28 @@ class AddNotes extends StatelessWidget{
               hint: "Note",
             ),
           ],
+          offset: ViewportOffset.fixed(2),
         ),
-      ),
-      bottomNavigationBar: Transform.translate(
-      offset: Offset(0.0, -1 * MediaQuery.of(context).viewInsets.bottom),
-      child: BottomAppBar(
-        shape: CircularNotchedRectangle(),
-        notchMargin: 4.0,
-        elevation: 20.0,
-        child: new Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            _bottomBarElement(icon: Icons.add_box_outlined,onTap: (){}),
-            _bottomBarElement(icon: Icons.undo,onTap: (){}),
-            //_bottomBarElement(icon: Icons.undo,onTap: (){}),
-            _bottomBarElement(icon: Icons.more_vert,onTap: (){},
-            )
-          ],
-        ),
-      ),
-    )
-    );
+        bottomNavigationBar: Transform.translate(
+          offset: Offset(0.0, -1 * MediaQuery.of(context).viewInsets.bottom),
+          child: BottomAppBar(
+            shape: CircularNotchedRectangle(),
+            notchMargin: 4.0,
+            elevation: 20.0,
+            child: new Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                _bottomBarElement(icon: Icons.add_box_outlined, onTap: () {}),
+                _bottomBarElement(icon: FontAwesomeIcons.redoAlt, onTap: () {}),
+                //_bottomBarElement(icon: Icons.undo,onTap: (){}),
+                _bottomBarElement(
+                  icon: Icons.more_vert,
+                  onTap: () {},
+                )
+              ],
+            ),
+          ),
+        ));
   }
 
   iconButton({Function onTap, IconData icon}) {
@@ -100,6 +108,7 @@ class AddNotes extends StatelessWidget{
               hintText: hint)),
     );
   }
+
   _bottomBarElement({IconData icon, Function onTap}) {
     return Padding(
       padding: const EdgeInsets.all(4.0),
@@ -115,5 +124,25 @@ class AddNotes extends StatelessWidget{
         onTap: onTap,
       ),
     );
+  }
+
+  _imageGridView() {
+    return ListView.builder(
+        itemCount: 5,
+        itemBuilder: (context, i) {
+          return new Text("data $i");
+        });
+    // if (cameraImage == null && galleryImage != null) {
+    //   return StaggeredGridView.countBuilder(
+    //     crossAxisCount: 3,
+    //     itemCount: galleryImage.length,
+    //     itemBuilder: (context, index) {
+    //       return Image.file(galleryImage[index]);
+    //     },
+    //     staggeredTileBuilder: (index) => StaggeredTile.fit(1),
+    //   );
+    // } else {
+    //   return Image.file(cameraImage);
+    // }
   }
 }
