@@ -54,11 +54,12 @@ class BottomBar extends StatelessWidget {
       ),
       titleTextStyle:
           GoogleFonts.poppins(fontSize: 16.0, fontWeight: FontWeight.w500),
-      titlePadding: EdgeInsets.only(left: 20, top: 20),
+      titlePadding: EdgeInsets.only(left: 20,top: 20),
       content: new Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           new ListTile(
+            
             title: new Text("Take photo"),
             leading: Icon(Icons.camera_alt_outlined),
             onTap: () {
@@ -74,7 +75,7 @@ class BottomBar extends StatelessWidget {
           ),
         ],
       ),
-      contentPadding: EdgeInsets.only(left: 25.0, top: 0.0, bottom: 0.0),
+      contentPadding: EdgeInsets.only( bottom: 10.0),
       contentTextStyle: GoogleFonts.poppins(fontSize: 16.0),
     );
 
