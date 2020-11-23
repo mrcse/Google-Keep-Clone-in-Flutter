@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:keep_clone/AppUtills/imageCard.dart';
 
 class AddNotes extends StatelessWidget {
   final cameraImage;
@@ -32,14 +32,32 @@ class AddNotes extends StatelessWidget {
           ],
           backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         ),
-        body: ShrinkWrappingViewport(
-          slivers: [
-            (null != galleryImage)
-                ? Image.file(galleryImage[0])
-                : Container(
-                    height: 20.0,
-                    color: Colors.transparent,
-                  ),
+        body: ListView(
+          children: [
+            (null != galleryImage )
+                ? StaggeredGridView.countBuilder(
+                    shrinkWrap: true,
+                    crossAxisCount: 3,
+                    itemCount: galleryImage.length,
+                    itemBuilder: (context, index) => ImageCard(
+                      imageFile: galleryImage[index],
+                    ),
+                    staggeredTileBuilder: (index) {
+                      int count = (galleryImage.length % 3 == 0
+                          ? 1
+                          : (index % 3 == 0)
+                              ? 2
+                              : 1);
+                      return StaggeredTile.count(count, count);
+                    },
+                    mainAxisSpacing: 4.0,
+                    crossAxisSpacing: 4.0,
+                  )
+                : (null == galleryImage && null != cameraImage)
+                    ? ImageCard(
+                        imageFile: cameraImage,
+                      )
+                    : Container(),
             textFeild(controller: _titleController, size: 24.0, hint: "Title"),
             textFeild(
               controller: _noteController,
@@ -47,7 +65,6 @@ class AddNotes extends StatelessWidget {
               hint: "Note",
             ),
           ],
-          offset: ViewportOffset.fixed(2),
         ),
         bottomNavigationBar: Transform.translate(
           offset: Offset(0.0, -1 * MediaQuery.of(context).viewInsets.bottom),
@@ -59,7 +76,7 @@ class AddNotes extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 _bottomBarElement(icon: Icons.add_box_outlined, onTap: () {}),
-                _bottomBarElement(icon: FontAwesomeIcons.redoAlt, onTap: () {}),
+                _bottomBarElement(icon: Icons.undo, onTap: () {}),
                 //_bottomBarElement(icon: Icons.undo,onTap: (){}),
                 _bottomBarElement(
                   icon: Icons.more_vert,
@@ -124,25 +141,5 @@ class AddNotes extends StatelessWidget {
         onTap: onTap,
       ),
     );
-  }
-
-  _imageGridView() {
-    return ListView.builder(
-        itemCount: 5,
-        itemBuilder: (context, i) {
-          return new Text("data $i");
-        });
-    // if (cameraImage == null && galleryImage != null) {
-    //   return StaggeredGridView.countBuilder(
-    //     crossAxisCount: 3,
-    //     itemCount: galleryImage.length,
-    //     itemBuilder: (context, index) {
-    //       return Image.file(galleryImage[index]);
-    //     },
-    //     staggeredTileBuilder: (index) => StaggeredTile.fit(1),
-    //   );
-    // } else {
-    //   return Image.file(cameraImage);
-    // }
   }
 }

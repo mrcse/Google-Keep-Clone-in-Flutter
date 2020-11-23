@@ -25,8 +25,8 @@ class ImageController {
 
   openFileExplore() async {
     try {
-      _filePickerResult =
-          await FilePicker.platform.pickFiles(allowMultiple: true);
+      _filePickerResult = await FilePicker.platform
+          .pickFiles(allowMultiple: true, type: FileType.image);
     } on PlatformException catch (e) {
       print("Unsupported operation" + e.toString());
     } catch (ex) {
@@ -37,6 +37,6 @@ class ImageController {
     } else {
       Text("Error while picking Images...");
     }
-    Get.off(AddNotes(cameraImage: _cameraImage,galleryImage: _imageFiles));
+    Get.off(AddNotes(cameraImage: _cameraImage, galleryImage: _imageFiles));
   }
 }
