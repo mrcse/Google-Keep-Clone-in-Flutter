@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:keep_clone/AppUIs/notesSearch.dart';
+import 'package:get/get.dart';
 
 class NormalAppBar extends StatelessWidget {
   final Function changeView;
@@ -11,21 +12,19 @@ class NormalAppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SliverPadding(
-      padding: EdgeInsets.symmetric(horizontal: 20),
+      padding: EdgeInsets.symmetric(horizontal: 0),
       sliver: new SliverAppBar(
         automaticallyImplyLeading: false,
         elevation: 0,
         floating: true,
         backgroundColor: Colors.transparent,
-        flexibleSpace: new Card(
+        title: new Card(
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
-          margin: EdgeInsets.only(top: 40),
           child: InkWell(
             customBorder: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(8.0)),
-            onTap: () => Navigator.push(
-                context, MaterialPageRoute(builder: (_) => NotesSearch())),
+            onTap: () => Get.to(NotesSearch()),
             child: Padding(
               padding: const EdgeInsets.all(6.0),
               child: Row(
