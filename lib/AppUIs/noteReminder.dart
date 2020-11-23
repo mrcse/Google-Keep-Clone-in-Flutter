@@ -7,6 +7,7 @@ import 'package:keep_clone/AppUtills/AppBottomBar/bottomAppBar.dart';
 import 'package:keep_clone/AppUtills/AppBottomBar/floatingActionButton.dart';
 import 'package:keep_clone/AppUtills/AppDrawer/appDrawer.dart';
 import 'package:keep_clone/AppUtills/selectiveGridView.dart';
+import 'package:get/get.dart';
 
 class RemindNotes extends StatefulWidget {
   RemindNotes({Key key}) : super(key: key);
@@ -90,8 +91,7 @@ class _RemindNotesState extends State<RemindNotes> {
       ),
       bottomNavigationBar: BottomBar(),
       floatingActionButton: FloatingButton(
-        onPressed: () => Navigator.push(
-            context, MaterialPageRoute(builder: (_) => AddNotes())),
+        onPressed: () => Get.to(AddNotes()),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.miniEndDocked,
     );
